@@ -14,6 +14,12 @@ export class UserEntity {
   @Column()
   password: string;
 
+  @Column({ name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ name: 'updated_at' })
+  updatedAt: Date;
+
   constructor(input: Partial<UserEntity>) {
     Object.assign(this, input);
   }

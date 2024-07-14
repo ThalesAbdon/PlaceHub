@@ -9,9 +9,10 @@ import {
   Request,
   Response,
   Type,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ApiBody, ApiParam } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiSecurity } from '@nestjs/swagger';
 import {
   Request as RequestExpress,
   Response as ResponseExpress,
@@ -20,6 +21,7 @@ import { IController } from 'src/shared/interfaces/controller.interface';
 import { IService } from 'src/shared/interfaces/service.interface';
 import { createPipe, createPipeParam } from 'src/shared/utils/create-pipe';
 import { AbstractValidationPipe } from 'src/shared/validators/validator-pipe';
+import { AuthGuard } from '../auth/auth.guard';
 
 export function ControllerCore<O, CreateDto>(
   Entity: any,
@@ -29,7 +31,7 @@ export function ControllerCore<O, CreateDto>(
   const createValidate = createPipe(createDto);
   const createValidateParam = createPipeParam(ParamDto);
 
-  //   @ApiSecurity('token')
+  @ApiSecurity('token')
   class Controller implements IController<O> {
     constructor(@Inject() private readonly service: IService<any, O>) {}
 
@@ -38,6 +40,7 @@ export function ControllerCore<O, CreateDto>(
     }
 
     @Post('')
+    // @UseGuards(AuthGuard)
     @ApiBody({ type: createDto, required: true })
     @UsePipes(createValidate)
     async create(
@@ -54,6 +57,7 @@ export function ControllerCore<O, CreateDto>(
     }
 
     @Patch('/:id')
+    @UseGuards(AuthGuard)
     @ApiParam({
       name: 'id',
       required: true,
@@ -78,6 +82,7 @@ export function ControllerCore<O, CreateDto>(
     }
 
     @Get('/')
+    @UseGuards(AuthGuard)
     async get(
       @Request() req: RequestExpress,
       @Response() res: ResponseExpress,
@@ -91,6 +96,7 @@ export function ControllerCore<O, CreateDto>(
     }
 
     @Get('/:id')
+    @UseGuards(AuthGuard)
     @ApiParam({
       name: 'id',
       required: true,
@@ -110,6 +116,7 @@ export function ControllerCore<O, CreateDto>(
     }
 
     @Delete('/:id')
+    @UseGuards(AuthGuard)
     @ApiParam({
       name: 'id',
       required: true,
