@@ -40,7 +40,7 @@ export function ControllerCore<O, CreateDto>(
     }
 
     @Post('')
-    // @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard)
     @ApiBody({ type: createDto, required: true })
     @UsePipes(createValidate)
     async create(
@@ -88,7 +88,7 @@ export function ControllerCore<O, CreateDto>(
       @Response() res: ResponseExpress,
     ): Promise<O> {
       try {
-        const data = await this.service.get();
+        const data = await this.service.get(req.query);
         return res.status(200).json(data) as O;
       } catch (error) {
         return res.status(500).json({ message: error.message }) as O;

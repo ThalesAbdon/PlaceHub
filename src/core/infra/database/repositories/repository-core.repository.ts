@@ -23,8 +23,8 @@ export function RepositoryCore<I extends { id: string }>(
       return this.repo.save({ id, ...input });
     }
 
-    async get(): Promise<I[]> {
-      return this.repo.find();
+    async get(where: Record<string, any>): Promise<I[]> {
+      return this.repo.find({ where: where });
     }
     async findById(id: any): Promise<any> {
       return this.repo.findOne(id);

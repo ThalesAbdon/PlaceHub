@@ -15,8 +15,8 @@ export function ServiceCore<I = any, O = any>(): new (
       return this.repository.update(id, input) as O;
     }
 
-    async get(): Promise<O> {
-      return this.repository.get() as O;
+    async get(where: Record<string, any>): Promise<O> {
+      return this.repository.get(where) as O;
     }
     async getById(id: number): Promise<O> {
       return this.repository.findById({ where: { id } }) as O;
