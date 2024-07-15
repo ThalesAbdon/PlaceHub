@@ -5,14 +5,23 @@ import { Repository } from 'typeorm';
 import { RepositoryCore } from 'src/core/infra/database/repositories/repository-core.repository';
 
 @Injectable()
-export class UserRepository extends RepositoryCore(UserEntity) {
+export class UserRepository extends RepositoryCore<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
-    private repo: Pick<
+    protected repo: Pick<
       Repository<UserEntity>,
-      'save' | 'findOne' | 'create' | 'findBy'
+      'save' | 'find' | 'findOne' | 'delete' | 'findBy'
     >,
   ) {
-    super();
+    super(repo);
+  }
+
+  static convertStringsToUpperCase(obj: any): any {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key) && key !== 'email') {
+        obj[key] = obj[key].toUpperCase();
+      }
+    }
+    return obj;
   }
 }
