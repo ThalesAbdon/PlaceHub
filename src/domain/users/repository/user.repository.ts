@@ -8,12 +8,12 @@ import { RepositoryCore } from 'src/core/infra/database/repositories/repository-
 export class UserRepository extends RepositoryCore<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
-    protected repo: Pick<
+    protected repository: Pick<
       Repository<UserEntity>,
       'save' | 'find' | 'findOne' | 'delete' | 'findBy'
     >,
   ) {
-    super(repo);
+    super(repository);
   }
 
   static convertStringsToUpperCase(obj: any): any {

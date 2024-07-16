@@ -77,9 +77,19 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+    "domain/**/controller/*.{js,jsx,ts,tsx}",
+    "domain/**/service/*.{js,jsx,ts,tsx}",
+    "domain/**/repository/*.{js,jsx,ts,tsx}"
     ],
+    "global": {
+      "ts-jest": {
+        "autoMapModuleNames": true
+      }
+    },
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/../src/$1"
+    }
   }
 }

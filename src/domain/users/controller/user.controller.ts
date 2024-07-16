@@ -36,7 +36,7 @@ export class UserController extends ControllerCore<any, CreateUserDto>(
 
   async beforeCreate(createDto: CreateUserDto) {
     const user = await this.service.findByEmail(createDto.email);
-    if (user[0]) {
+    if (user) {
       throw new BadRequestException('Email already exist');
     }
 

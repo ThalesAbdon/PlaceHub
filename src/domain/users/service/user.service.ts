@@ -11,7 +11,7 @@ export class UserService extends ServiceCore<UserEntity, UserEntity>() {
     super();
   }
 
-  async findByEmail(email: string): Promise<boolean> {
+  async findByEmail(email: string): Promise<UserEntity> {
     return this.repository.findOne({ email });
   }
 }

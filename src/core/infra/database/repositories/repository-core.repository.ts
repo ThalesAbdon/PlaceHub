@@ -8,30 +8,30 @@ class Entity {
 export class RepositoryCore<I> {
   constructor(
     @InjectRepository(Entity)
-    protected repo: Pick<
+    protected repository: Pick<
       RepositoryTypeorm<I>,
       'save' | 'find' | 'findOne' | 'delete' | 'findBy'
     >,
   ) {}
 
   async create(input: I): Promise<I> {
-    return this.repo.save(input);
+    return this.repository.save(input);
   }
 
   async update(id: number, input: I): Promise<I> {
-    return this.repo.save({ id, ...input });
+    return this.repository.save({ id, ...input });
   }
 
   async findById(id: any): Promise<any> {
-    return this.repo.findOne(id);
+    return this.repository.findOne(id);
   }
 
   async findOne(input: any): Promise<any> {
-    return this.repo.findBy(input);
+    return this.repository.findBy(input);
   }
 
   async delete(id: number): Promise<DeleteResult> {
-    return this.repo.delete(id);
+    return this.repository.delete(id);
   }
 
   static convertStringsToUpperCase(obj: any): any {
@@ -45,6 +45,6 @@ export class RepositoryCore<I> {
 
   async get(where: Record<string, any>): Promise<unknown> {
     where = RepositoryCore.convertStringsToUpperCase(where);
-    return this.repo.find({ where: where });
+    return this.repository.find({ where: where });
   }
 }
