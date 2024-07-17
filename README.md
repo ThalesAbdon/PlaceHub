@@ -84,20 +84,26 @@ depois, dê control + C para encerrar o programa
   ```Email: admin@admin.com``` e 
   ```Password: root```
   Basta clicar em Login
+
   ![Interface de login do PgAdmin4](images/Pgadmin-login.png)
   
   ### 3. Servidor
   Provavelmente, quando logar, não haverá um servidor, então clique em adicionar novo servidor
+
   ![Servidor ](images/add-server.png)
 
   ### 4. Configurando Servidor
   Na aba geral, tudo que precisa colocar o campo nome ( pode ser qualquer nome, coloquei o nome do projeto place-hub) 
+
+    
   ![Aba General](images/general.png)
+
 
   Na aba Conexão, é necessário colocar o campo
   - Host name/address: ```localhost```
   - Username: ```root```
   - Senha: ```root```
+
   ![Aba conexão](images/connections.png)
 
   Agora, basta clicar em Salvar
