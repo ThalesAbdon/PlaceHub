@@ -21,11 +21,13 @@ describe(UserService.name, () => {
   });
 
   test('should be save user', async () => {
-    const user = {
-      name: 'Test',
-      email: 'test@email.com',
-      password: '123456',
-    };
+    const user = [
+      {
+        name: 'Test',
+        email: 'test@email.com',
+        password: '123456',
+      },
+    ];
     const spyOne = jest.spyOn(service, 'create');
     await service.create(user as any);
     expect(spyOne).toHaveBeenCalled();

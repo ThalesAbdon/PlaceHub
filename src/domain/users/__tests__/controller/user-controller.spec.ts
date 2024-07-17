@@ -5,6 +5,7 @@ import { AuthService } from 'src/core/auth/auth.service';
 import { Request, Response } from 'express';
 import { LoginUserDto } from '../../dto/login-user.dto';
 import { BadRequestException } from '@nestjs/common';
+import { CreateUserDto } from '../../dto/create-user.dto';
 
 const service = Object.freeze({
   create: jest.fn(),
@@ -12,7 +13,7 @@ const service = Object.freeze({
   get: jest.fn(),
   getById: jest.fn(),
   delete: jest.fn(),
-  findByEmail: jest.fn(),
+  findByEmail: jest.fn().mockResolvedValue([{}]),
 }) as unknown as UserService;
 
 const bcrypt = Object.freeze({
@@ -31,10 +32,10 @@ const res = Object.freeze({
 
 describe(UserService.name, () => {
   let controller: UserController;
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
-  beforeAll(() => {
+  beforeEach(() => {
     controller = new UserController(service, bcrypt, authService);
   });
 
@@ -43,19 +44,23 @@ describe(UserService.name, () => {
   });
 
   test('should be save user', async () => {
-    const user = {
-      name: 'Test',
-      email: 'test@email.com',
-      password: '123456',
-      id: 1,
-      createdAt: undefined,
-      updatedAt: undefined,
-    };
+    const user = [
+      {
+        name: 'Test',
+        email: 'test@email.com',
+        password: '123456',
+        id: 1,
+        createdAt: undefined,
+        updatedAt: undefined,
+      },
+    ];
+
     jest.spyOn(service, 'findByEmail').mockResolvedValue(null);
     jest.spyOn(bcrypt, 'sign').mockReturnValue('hashedPassword');
-    jest.spyOn(service, 'create').mockResolvedValue(user);
+    jest.spyOn(controller, 'beforeCreate').mockReturnValue(null);
+    jest.spyOn(service, 'create').mockResolvedValue({ ...user[0] } as any);
     const spyOne = jest.spyOn(controller, 'create');
-    await controller.create(user as any, res);
+    await controller.create({ ...user[0] } as any, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(spyOne).toHaveBeenCalledTimes(1);
   });
@@ -88,19 +93,66 @@ describe(UserService.name, () => {
     expect(spyOne).toHaveBeenCalledTimes(1);
   });
 
-  test('should be before create', async () => {
-    try {
-      jest.spyOn(service, 'findByEmail').mockReturnValue({} as any);
-      await controller.beforeCreate({
-        email: 'test@email.com',
+  test('should throw an error if email already exists', async () => {
+    const createUserDto: CreateUserDto = {
+      email: 'test@example.com',
+      password: 'password123',
+      name: 'Test',
+      id: 1,
+      createdAt: undefined,
+      updatedAt: undefined,
+    };
+
+    const user = [
+      {
+        email: 'test@example.com',
+        password: 'password123',
         name: 'Test',
-        password: '123456',
-        id: 0,
+        id: 1,
         createdAt: undefined,
         updatedAt: undefined,
-      });
-    } catch (e) {
-      expect(e.message).toBe('Email already exist');
+      },
+    ];
+
+    jest.spyOn(service, 'findByEmail').mockResolvedValue([user] as any);
+    try {
+      await controller.beforeCreate(createUserDto);
+    } catch (err) {
+      expect(err.message).toBe('Email already exist');
+    }
+  });
+
+  test('should throw an error if email already exists', async () => {
+    const createUserDto: CreateUserDto = {
+      email: 'test@example.com',
+      password: 'password123',
+      name: 'Test',
+      id: 1,
+      createdAt: undefined,
+      updatedAt: undefined,
+    };
+
+    jest.spyOn(service, 'findByEmail').mockResolvedValue([] as any);
+    jest.spyOn(bcrypt, 'sign').mockResolvedValue('hash');
+    const response = await controller.beforeCreate(createUserDto);
+    expect(response).toBeDefined();
+  });
+
+  it('should throw an error create', async () => {
+    const user = {
+      email: 'test@example.com',
+      password: 'password123',
+      name: 'Test',
+      id: 1,
+      createdAt: undefined,
+      updatedAt: undefined,
+    };
+
+    jest.spyOn(service, 'findByEmail').mockResolvedValue([user] as any);
+    try {
+      await controller.create(user as any, res);
+    } catch (err) {
+      expect(err.message).toBe('Email already exist');
     }
   });
 
