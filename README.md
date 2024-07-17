@@ -6,7 +6,8 @@ Este é um desafio para testar minhas habilidades na construção de APIs. O obj
 
 ## Conteúdo
 - [Instalação e Execução](#instalação-e-execução)
-- [Postgres Admin](#postgres)
+- [Postgres Admin](#postegres-admin)
+- [Testes da API](#testes-da-api)
 - [Features](#features)
     - 1.1 [Criar um usuario](#user)
     - 1.2 [Autenticar um usuário](#user)
@@ -16,7 +17,7 @@ Este é um desafio para testar minhas habilidades na construção de APIs. O obj
     - 1.6 [Listar todos os locais](#listar)
     - 1.7 [Listar lugares e filtrá-los por nome](#listar)
 - [Arquitetura](#arquitetura)
-- [Testes da API](#testes-da-api)
+
 
 ## Instalação e Execução
 
@@ -69,7 +70,7 @@ depois, dê control + C para encerrar o programa
   $sudo docker stop id_container1 id_container2 id_container3
   ```
  
-# Postegres (OPCIONAL)
+# Postegres Admin
   ## A partir daqui, estou considerando a utilização das variavéis de ambiente que estão no arquivo: ```.env.example```.
   
   ###Sinta-se a vontade para utilizar a ferramenta de administração de banco de dados que quiser! ( eu mesmo utilizo o DBeaver), porém deixei aqui o PGAdmin4
@@ -119,7 +120,7 @@ depois, dê control + C para encerrar o programa
     "statusCode": 403
   }
   ```
-
+#Features
 ## User
   -  Gerenciamento autenticação de usuários.
   
